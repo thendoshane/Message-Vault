@@ -1,0 +1,150 @@
+<html>
+<head>
+    <style>
+        body{
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /*max-height: 100vh;*/
+            background-image:url("vault.jpg");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            z-index: -1;
+        }
+        nav{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: center;
+            background-color:transparent;
+        }        
+        .left_nav h2{
+            color: white;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        .right_nav{
+            display: flex;
+            gap: 20px;
+        }
+        .right_nav a{
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Hero section */
+        .hero{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: 0 auto;
+            align-items: center;
+            text-align: center;
+        }
+        .hero p{
+            color:white;
+        }
+        .hero form{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        input{
+            padding: 10px 20px;
+            border: none ;
+            border-radius: 5px;
+        }
+        .hero a{
+            color: white;
+        }
+        @media screen and (max-width: 600px) {
+            nav{
+                display: flex;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="left_nav">
+            <h2 id="home">MessageVault</h2>
+        </div>
+        <div class="right_nav">
+            <a href="signin.html">Access Your Account</a>
+        </div>
+    </nav>
+    <div class="hero">
+        <p>Create an Account</p>
+        <form id="register-form">
+            <input id="fname" type="text" placeholder="First Name: "/>
+            <input id="lname" type="text" placeholder="Last Name: "/>
+            <input id="email" type="email" placeholder="Email Address: "/>
+            <input id="password" type="password" placeholder="Account Password: "/>
+            <input type="submit" value="Create an Account"/>
+        </form>
+        <p id="message"></p>
+        
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script>
+  // Initialize Supabase client
+  const supabaseUrl = 'https://kyvvnfvfiighnrnxzeuz.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; // Keep this key safe in production
+  const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Home button navigation
+    document.querySelector("#home").addEventListener('click', function () {
+      window.location.href = "index.html";
+    });
+
+    // Handle form submission
+    const form = document.getElementById('register-form');
+    const message = document.getElementById('message');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault(); // Prevent page reload
+
+      const fname = document.getElementById('fname').value;
+      const lname = document.getElementById('lname').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      // Sign up using Supabase Auth
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+
+      if (signUpError) {
+        message.textContent = 'Signup failed: ' + signUpError.message;
+        return;
+      }
+
+      const user = signUpData.user;
+
+      // Insert user profile into custom table (e.g., user_profile)
+      const { error: dbError } = await supabase.from('user_profile').insert([
+        {
+          id: user.id, // FK to auth.users
+          fname: fname,
+          lname: lname,
+          email: email
+        }
+      ]);
+
+      if (dbError) {
+        message.textContent = 'User created, but profile insert failed: ' + dbError.message;
+      } else {
+        message.textContent = 'Registration successful! Redirecting to login...';
+        setTimeout(() => {
+          window.location.href = "signin.html";
+        }, 2000); // Delay for user feedback
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

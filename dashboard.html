@@ -1,0 +1,92 @@
+<html>
+<head>
+    <style>
+        body{
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /*max-height: 100vh;*/
+            background-image:url("vault.jpg");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            z-index: -1;
+        }
+        nav{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: center;
+            background-color:transparent;
+        }   
+        nav a{
+            text-decoration: none;
+            color: white;
+        }
+        nav a:hover{
+            color: red;
+            transition: 0.5s ease-in;
+        }
+
+        .checkPage{
+            display: none;
+            flex-direction: column;
+            text-align: center;
+            
+        }
+        .checkPage h1, .checkPage h2{
+            color: white;
+        }
+
+        .hiddenMessage{
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            height: 70vh;
+        }
+
+        .createLink{
+            display: flex;
+            flex-direction: column;
+            color: white;
+        }
+         .createLink a{
+            color: white;
+         }
+         .createLink textarea{
+            border: none;
+            border-radius: 5px;
+         }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="#">Send a Hidden message</a>
+        <a href="#">All Hidden Notes</a>
+        <a href="#">Manage Profile</a>
+        <a href="#">Log Out</a>
+    </nav>
+    <main>
+        <div class="checkPage">
+            <h1> Welcome <span id="userName"></span></h1>
+            <h2>Message Vault Allows you to store those links and notes you can never hide on your note 
+                , remember you cant hide your thumb while sleeping, so no they are not safe
+            </h2>
+        </div>
+
+        <div class="hiddenMessage">
+            <div class="manageLinks">
+                <p>Hidden Message Links:</p>
+            </div>
+            <div class="createLink">
+                <label>Enter Message to hide:</label>
+                <textarea></textarea>
+                <a href="#"> Generate Link</a>
+            </div>
+        </div>
+
+    </main>
+    <script>
+
+    </script>
+</body>
+</html>
